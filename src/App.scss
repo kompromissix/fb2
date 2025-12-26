@@ -2,3 +2,27 @@
     padding: 0;
     margin: 0;
 }
+main{
+    width: 100%;
+    height: 3099px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url(./Main_assets/scribble_light.png);
+    >div{
+        background-color: white;
+        width: 1449px;
+        height: 2704px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        >div{
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+            align-items: center;
+            width: 1248px;
+            height: 2195px;
+        }
+    }
+}
