@@ -23,6 +23,93 @@ main{
             align-items: center;
             width: 1248px;
             height: 2195px;
+            >div:nth-child(1){
+                width: 1248px;
+                height: 1254px;
+                display: flex;
+                flex-direction: column;
+                >div:nth-child(1){
+                    width: 100%;
+                    height: 108px;
+                    display: flex;
+                    justify-content: space-between;
+                    flex-direction: column;
+                    font-size: 25px;
+                    >div{
+                        width: 100%;
+                        height: 60px;
+                        display: flex;
+                        align-items: center;
+                        border: 1px solid black;
+                        border-radius: 2px;
+                        padding-left: 5px;
+                        >div{
+                            display: flex;
+                            width: auto;
+                            height: 48px;
+                            >div{
+                                width: 76px;
+                                height: 48px;
+                                border: 1px solid black;
+                                border-radius: 2px;
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                background: none;
+                                >span{
+                                    padding-left: 12px;
+                                }
+                                >button{
+                                    margin-right: 12px;
+                                    background: none;
+                                    border: none;
+                                    font-size: 15px;
+                                }
+                            }
+                        }
+                        >button{
+                            margin: 10px;
+                            border: 1px solid black;
+                            border-radius: 5px;
+                            background: none;
+                            width: 50px;
+                            height: 48px;
+                            font-size: 30px;
+                            padding-top: 3px;
+                        }
+                    }
+                }
+                >div:nth-child(2){
+                    max-width: 1248px;
+                }
+            }
+
         }
     }
+}
+.chapter{
+    width: 100%;
+    height: 926px;
+    padding-left: 10px;
+    padding-top: 17px;
+    >div:nth-child(1){
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        >textarea{
+            width: 339px;
+            height: 48px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            border: 1px solid black;
+            border-radius: 5px;
+            font-size: 18px;
+            color: #6B6B6B;
+        }
+    }
+}
+.tom{
+    width: 1248px;
 }

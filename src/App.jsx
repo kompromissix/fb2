@@ -1,5 +1,5 @@
 import "./App.scss";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination, Scrollbar, A11y, Mousewheel } from 'swiper/modules';
 // import Swiper and modules styles
@@ -10,8 +10,9 @@ import 'swiper/css/scrollbar';
 
 export default function App() {
     const [genres, setGenres] = useState(['']);
+    const [annota, setAnnota] = useState(['']);
     const [tom, setTom] = useState([{ tom: '' }]);
-    
+    const tomSwiperRef = useRef(null);
     const [chapters, setChapters] = useState([
       [{ chapter: '' }]
     ]);
@@ -27,7 +28,24 @@ export default function App() {
     const fileInputRef = useRef();
     const now = new Date();
     const currentDate = now.toLocaleDateString();
+    const paginationRef = useRef(null);
 
+    useEffect(() => {
+      const el = paginationRef.current;
+      if (!el) return;
+    
+      const handler = (e) => {
+        const btn = e.target.closest('[data-delete]');
+        if (!btn) return;
+    
+        const index = Number(btn.dataset.delete);
+        removeTom(index);
+      };
+  
+      el.addEventListener('click', handler);
+      return () => el.removeEventListener('click', handler);
+    }, [tom.length]);
+    
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -47,11 +65,11 @@ export default function App() {
                 const base64String = base64Data.split(',')[1];
                 setImageData(base64String);
             };
-            
+
             img.onerror = () => {
                 alert('Ошибка загрузки изображения');
             };
-            
+
             img.src = event.target.result;
         };
         
@@ -88,6 +106,27 @@ export default function App() {
     const removeGenre = (index) => {
         const newGenre = genres.filter((_, i) => i !== index);
         setGenres(newGenre);
+    };
+
+    const addAnno = () => {
+        setAnnota([...annota, '']);
+    };
+
+    const updateAnno = (annoIndex, value) => {
+        const newAnno = [...annota];
+        newAnno[annoIndex] = value;
+        setAnnota(newAnno);
+    };
+
+    const Annofb2 = () => {
+        return annota
+            .filter(annoItem => annoItem.trim() !== '')
+            .map(annoItem => `<p>${annoItem}</p>`)
+            .join('\n');
+    };
+    const removeAnno = (annoIndex) => {
+        const newAnno = annota.filter((_, i) => i !== annoIndex);
+        setGenres(newAnno);
     };
 
     const wrapTextWithStrong = (tomIndex, chapterIndex, textIndex) => {
@@ -460,13 +499,16 @@ export default function App() {
         setTom(newTom);
     };
 
-    const removeTom = (index) => {
-        const newTom = tom.filter((_, i) => i !== index);
-        const newChapters = chapters.filter((_, i) => i !== index);
-        const newTextfb = textfb.filter((_, i) => i !== index);
-        setTom(newTom);
-        setChapters(newChapters);
-        setTextfb(newTextfb);
+    const removeTom = (tomIndex) => {
+      setTom(prev => prev.filter((_, i) => i !== tomIndex));
+        
+      setChapters(prev => prev.filter((_, i) => i !== tomIndex));
+        
+      setTextfb(prev => prev.filter((_, i) => i !== tomIndex));
+        
+      setIdfb(prev => prev.filter((_, i) => i !== tomIndex));
+        
+      textareaRefs.current.splice(tomIndex, 1);
     };
 
     const Tomfb2 = () => {
@@ -482,7 +524,6 @@ export default function App() {
 
     const handleClick = () => {
         const name_book = document.getElementById('name_book').value;
-        const annotation = document.getElementById('annotation').value;
         const first_name = document.getElementById('first_name').value;
         const last_name = document.getElementById('last_name').value;
         const keywords = document.getElementById('keywords').value;
@@ -504,7 +545,7 @@ export default function App() {
                             <image l:href="#cover.jpg"/>
                         </coverpage>
                         <annotation>
-                            <p>${annotation}</p>
+                            ${Annofb2()}
                         </annotation>
                     </title-info>
                     <keywords>${keywords}</keywords>
@@ -541,20 +582,29 @@ export default function App() {
         <main>
             <div>
                 <div>
-                    <div className="swip">
-                        <Swiper modules={[Navigation, Pagination, Scrollbar, A11y, Mousewheel]} spaceBetween={50} slidesPerView={1} navigation scrollbar = {{draggable:true}} direction='horizontal' pagination = {{clickable:true}} mousewheel = {{clickable:true}}>
+                    <div>
+                        <div>
+                            <p>Том</p>
+                            <div>
+                                <div ref={paginationRef} />
+                                <button  onClick={() => {const index = tomSwiperRef.current?.activeIndex; addTom(index);}}>+</button>
+                            </div>
+                        </div>
+                        <Swiper modules={[Navigation, Pagination, Scrollbar, A11y, Mousewheel]} initialSlide={1} onSwiper={(s) => (tomSwiperRef.current = s)} onSlideChange={(swiper) => {tomSwiperRef.current = swiper}} pagination={{el: paginationRef.current, clickable: true, renderBullet: (i, className) => {return `<div class="${className}"> <span>${i + 1}</span> <button data-delete="${i}">✖</button> </div>`;  },}}   onBeforeInit={(swiper) => {  swiper.params.pagination.el = paginationRef.current;}} spaceBetween={50} slidesPerView={1} navigation scrollbar = {{draggable:true}} direction='horizontal' mousewheel = {{clickable:true}}>
                             {tom.map((tomItem, tomIndex) => (
                             <SwiperSlide>
-                                <div key={tomIndex}>
+                                <div key={tomIndex} className="tom">
                                     <textarea value={tomItem.tom} onChange={e => updateTom(tomIndex, 'tom', e.target.value)} placeholder="Том"/>
                                     <button onClick={addTom}>Добавить том</button>
-                                    <button onClick={removeTom}>Удалить том</button>
                                     <button onClick={() => addChapter(tomIndex)}>Добавить главу</button>
                                     <Swiper modules={[Navigation, Pagination, Scrollbar, A11y, Mousewheel]} spaceBetween={50} slidesPerView={1} navigation scrollbar = {{draggable:true}} direction='horizontal' pagination = {{clickable:true}} mousewheel = {{clickable:true}}>
                                         {chapters[tomIndex]?.map((chapter, chapterIndex) => (
                                             <SwiperSlide>
-                                                <div key={chapterIndex}>
-                                                    <textarea value={chapter.chapter} onChange={e => updateChapter(tomIndex, chapterIndex, 'chapter', e.target.value)} placeholder="Глава"/>
+                                                <div key={chapterIndex} className="chapter">
+                                                    <div>
+                                                        <textarea value={chapter.chapter} onChange={e => updateChapter(tomIndex, chapterIndex, 'chapter', e.target.value)} placeholder="Заголовок"/>
+                                                    </div>
+
                                                     <button onClick={() => removeChapter(tomIndex, chapterIndex)}>Удалить главу</button>
                                                     {textfb[tomIndex][chapterIndex]?.map((textItem, textIndex) => (
                                                         <div key={textIndex}>
@@ -593,10 +643,15 @@ export default function App() {
                     ))}
                     <button type="button" onClick={addGenre}>+ Добавить жанр</button> */}
                     <div>
-                        <div>
-                            <p>Аннотация </p>
-                            <input type="text" id="annotation" placeholder="Аннотация"/>
-                        </div>
+                        {annota.map((annoItem, annoIndex) => (
+                            <div key={annoIndex}>
+                                <p>Аннотация</p>
+                                <div>
+                                    <textarea value={annoItem} onChange={(e) => updateAnno(annoIndex, e.target.value)} placeholder="Аннотация"/>
+                                </div>
+                            </div>
+                        ))}
+
                         <div>
                             <p>Keywords</p>
                             <input type="text" id="keywords" placeholder="keywords"/>
@@ -635,7 +690,7 @@ export default function App() {
                         </div>
                         <button type="button" onClick={handleClick}>Скачать файл</button>
                     </div>
-                    <form>
+                    {/* <form>
                         <label for="city">Жанр</label>
                         <select id="city" name="city">
                             <option value="moscow">Москва</option>
@@ -644,7 +699,7 @@ export default function App() {
                             <option value="novosibirsk">Новосибирск</option>
                         </select>
                         <button type="submit">Отправить</button>
-                    </form>
+                    </form> */}
                 </div>
             </div>
         </main>
