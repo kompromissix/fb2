@@ -29,22 +29,47 @@ export default function App() {
     const now = new Date();
     const currentDate = now.toLocaleDateString();
     const paginationRef = useRef(null);
+    const chapterPaginationRef = useRef([]);
+    const chapterSwiperRef = useRef([]);
 
     useEffect(() => {
-      const el = paginationRef.current;
-      if (!el) return;
-    
-      const handler = (e) => {
-        const btn = e.target.closest('[data-delete]');
-        if (!btn) return;
-    
-        const index = Number(btn.dataset.delete);
-        removeTom(index);
-      };
-  
-      el.addEventListener('click', handler);
-      return () => el.removeEventListener('click', handler);
+        const el = paginationRef.current;
+        if (!el) return;
+        
+        const handler = (e) => {
+          const btn = e.target.closest('[data-delete]');
+          if (!btn) return;
+        
+          const index = Number(btn.dataset.delete);
+          removeTom(index);
+        };
+      
+        el.addEventListener('click', handler);
+        return () => el.removeEventListener('click', handler);
     }, [tom.length]);
+    
+    useEffect(() => {
+      const handler = (e) => {
+        const btn = e.target.closest(".delete-chapter");
+        if (!btn) return;
+
+        // ищем, к какому тому принадлежит эта пагинация
+        const paginationEl = btn.closest("[data-tom]");
+        if (!paginationEl) return;
+
+        const tomIndex = Number(paginationEl.dataset.tom);
+        const chapterIndex = Number(btn.dataset.index);
+
+        removeChapter(tomIndex, chapterIndex);
+
+        requestAnimationFrame(() => {
+          chapterSwiperRef.current[tomIndex]?.update();
+        });
+      };
+
+      document.addEventListener("click", handler);
+      return () => document.removeEventListener("click", handler);
+    }, []);
     
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -78,13 +103,6 @@ export default function App() {
         };
         
         reader.readAsDataURL(file);
-    };
-
-    const handleConvertButtonClick = () => {
-        // Если файл уже выбран, конвертируем его
-        if (fileInputRef.current.files.length > 0) {
-            handleFileChange({ target: fileInputRef.current });
-        }
     };
 
     const addGenre = () => {
@@ -384,13 +402,19 @@ export default function App() {
     const removeChapter = (tomIndex, chapterIndex) => {
       setChapters(prev => {
         const copy = [...prev];
-        copy[tomIndex] = copy[tomIndex].filter((_, i) => i !== chapterIndex);
+    
+        const chaptersOfTom = copy[tomIndex] || [];
+        copy[tomIndex] = chaptersOfTom.filter((_, i) => i !== chapterIndex);
+    
         return copy;
       });
-
+    
       setTextfb(prev => {
         const copy = [...prev];
-        copy[tomIndex] = copy[tomIndex].filter((_, i) => i !== chapterIndex);
+    
+        const textsOfTom = copy[tomIndex] || [];
+        copy[tomIndex] = textsOfTom.filter((_, i) => i !== chapterIndex);
+    
         return copy;
       });
     };
@@ -590,26 +614,34 @@ export default function App() {
                                 <button  onClick={() => {const index = tomSwiperRef.current?.activeIndex; addTom(index);}}>+</button>
                             </div>
                         </div>
-                        <Swiper modules={[Navigation, Pagination, Scrollbar, A11y, Mousewheel]} initialSlide={1} onSwiper={(s) => (tomSwiperRef.current = s)} onSlideChange={(swiper) => {tomSwiperRef.current = swiper}} pagination={{el: paginationRef.current, clickable: true, renderBullet: (i, className) => {return `<div class="${className}"> <span>${i + 1}</span> <button data-delete="${i}">✖</button> </div>`;  },}}   onBeforeInit={(swiper) => {  swiper.params.pagination.el = paginationRef.current;}} spaceBetween={50} slidesPerView={1} navigation scrollbar = {{draggable:true}} direction='horizontal' mousewheel = {{clickable:true}}>
+                        <Swiper modules={[Navigation, Pagination, Scrollbar, A11y, Mousewheel]} initialSlide={1} onSwiper={(s) => (tomSwiperRef.current = s)} onSlideChange={(swiper) => {tomSwiperRef.current = swiper}} pagination={{el: paginationRef.current, clickable: true, renderBullet: (i, className) => {return `<div class="${className}"> <span>${i + 1}</span> <button data-delete="${i}">&#215;</button> </div>`}}} onBeforeInit={(swiper) => {swiper.params.pagination.el = paginationRef.current;}} spaceBetween={50} slidesPerView={1} navigation = {false}  direction='horizontal' allowTouchMove = {false}>
                             {tom.map((tomItem, tomIndex) => (
                             <SwiperSlide>
                                 <div key={tomIndex} className="tom">
-                                    <textarea value={tomItem.tom} onChange={e => updateTom(tomIndex, 'tom', e.target.value)} placeholder="Том"/>
-                                    <button onClick={addTom}>Добавить том</button>
-                                    <button onClick={() => addChapter(tomIndex)}>Добавить главу</button>
-                                    <Swiper modules={[Navigation, Pagination, Scrollbar, A11y, Mousewheel]} spaceBetween={50} slidesPerView={1} navigation scrollbar = {{draggable:true}} direction='horizontal' pagination = {{clickable:true}} mousewheel = {{clickable:true}}>
+                                    <div>
+                                        <p>Глава</p>
+                                        <div>
+                                            <div data-tom={tomIndex} ref={el => (chapterPaginationRef.current[tomIndex] = el)} />
+                                            <button onClick={() => addChapter(tomIndex)}>+</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <Swiper modules={[Navigation, Pagination, Scrollbar, A11y, Mousewheel]} initialSlide={1} onSwiper={(s) => (chapterSwiperRef.current[tomIndex] = s)} onSlideChange={(swiper) => {chapterSwiperRef.current = swiper}} pagination={{el: chapterPaginationRef.current[tomIndex], clickable: true, renderBullet: (i, className) => {return `<div class="${className}"> <span>${i + 1}</span> <button class="delete-chapter" data-index="${i}">&#215;</button> </div>`}}} onBeforeInit={(swiper) => {swiper.params.pagination.el = chapterPaginationRef.current[tomIndex]}} spaceBetween={50} slidesPerView={1} navigation = {false}  direction='horizontal' allowTouchMove = {false}>
                                         {chapters[tomIndex]?.map((chapter, chapterIndex) => (
                                             <SwiperSlide>
                                                 <div key={chapterIndex} className="chapter">
                                                     <div>
+                                                        <textarea value={tomItem.tom} onChange={e => updateTom(tomIndex, 'tom', e.target.value)} placeholder="Том"/>
                                                         <textarea value={chapter.chapter} onChange={e => updateChapter(tomIndex, chapterIndex, 'chapter', e.target.value)} placeholder="Заголовок"/>
                                                     </div>
-
-                                                    <button onClick={() => removeChapter(tomIndex, chapterIndex)}>Удалить главу</button>
                                                     {textfb[tomIndex][chapterIndex]?.map((textItem, textIndex) => (
-                                                        <div key={textIndex}>
-                                                            <textarea value={textItem.text} ref={el => {if (!textareaRefs.current[tomIndex]) {textareaRefs.current[tomIndex] = []} if (!textareaRefs.current[tomIndex][chapterIndex]) {textareaRefs.current[tomIndex][chapterIndex] = []} textareaRefs.current[tomIndex][chapterIndex][textIndex] = el}} onChange={e => updateText(tomIndex, chapterIndex, textIndex, 'text', e.target.value)} placeholder="Текст" />
-                                                            <button onClick={() => removeText(tomIndex, chapterIndex, textIndex)}>Удалить текст</button>
+                                                        <div key={textIndex} className="texts">
+                                                            <div>
+                                                                <textarea value={textItem.text} ref={el => {if (!textareaRefs.current[tomIndex]) {textareaRefs.current[tomIndex] = []} if (!textareaRefs.current[tomIndex][chapterIndex]) {textareaRefs.current[tomIndex][chapterIndex] = []} textareaRefs.current[tomIndex][chapterIndex][textIndex] = el}} onChange={e => updateText(tomIndex, chapterIndex, textIndex, 'text', e.target.value)} placeholder="Текст" />
+                                                                <button onClick={() => removeText(tomIndex, chapterIndex, textIndex)}>&#215;</button>
+                                                            </div>
+                                                            <button onClick={() => addText(tomIndex, chapterIndex)}>+</button>
+
                                                             <button onClick={() => wrapTextWithStrong(tomIndex, chapterIndex, textIndex)}>Strong</button>
                                                             <button onClick={() => wrapTextWithEmphasis(tomIndex, chapterIndex, textIndex)}>Emphasis</button>
                                                             <button onClick={() => wrapTextWithLink(tomIndex, chapterIndex, textIndex)}>Link</button>
@@ -618,7 +650,7 @@ export default function App() {
                                                             <button onClick={() => wrapTextWithStrikethrough(tomIndex, chapterIndex, textIndex)}>Strikethrough</button>
                                                         </div>
                                                     ))}
-                                                  <button onClick={() => addText(tomIndex, chapterIndex)}>Добавить текст</button>
+
                                                 </div>
                                             </SwiperSlide>
                                         ))}
@@ -629,7 +661,6 @@ export default function App() {
                         </Swiper>
 
                         <input type="file" ref={fileInputRef}onChange={handleFileChange}accept="image/*"/>
-                        <button type="button" onClick={handleConvertButtonClick}>Преобразовать в Base64</button>
                         <div>
                             <textarea  value={imageData} readOnly />
                         </div>
@@ -643,52 +674,89 @@ export default function App() {
                     ))}
                     <button type="button" onClick={addGenre}>+ Добавить жанр</button> */}
                     <div>
-                        {annota.map((annoItem, annoIndex) => (
+                        {/* {annota.map((annoItem, annoIndex) => (
                             <div key={annoIndex}>
                                 <p>Аннотация</p>
                                 <div>
                                     <textarea value={annoItem} onChange={(e) => updateAnno(annoIndex, e.target.value)} placeholder="Аннотация"/>
                                 </div>
                             </div>
-                        ))}
+                        ))} */}
+                        <div>
+                            <div>
+                                <p>Keywords</p>
+                                <div>
+                                    <div/>
+                                    <input type="text" id="keywords" placeholder="keywords"/>
+                                </div>
+                            </div>
+                            <div>
+                                <p>Название книги</p>
+                                <div>
+                                    <div/>
+                                    <input type="text" id="name_book" placeholder="Название книги"/>
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <p>Имя</p>
+                                    <div>
+                                        <div/>
+                                        <input type="text" id="first_name" placeholder="Имя"/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p>Фамилия</p>                                
+                                    <div>
+                                        <div/>
+                                        <input type="text" id="last_name" placeholder="Фамилия"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <p>Место издания</p>
+                                <div>
+                                    <div/>
+                                    <input type="text" id="city" placeholder="Место издания"/>
+                                </div>
+                            </div>
+                            <div>
+                                <div />
+                                <button type="button" onClick={handleClick}>СОЗДАТЬ FB2</button>
+                            </div>
 
-                        <div>
-                            <p>Keywords</p>
-                            <input type="text" id="keywords" placeholder="keywords"/>
                         </div>
                         <div>
-                            <p>Дата</p>
-                            <input type="text" id="date" placeholder="Текущее время"/>
+                            <div>
+                                <p>Дата</p>
+                                <div>
+                                    <div/>
+                                    <input type="text" id="date" placeholder="Текущее время"/>
+                                </div>
+                            </div>
+                            <div>
+                                <p>Название файла</p>
+                                <div>
+                                    <div/>
+                                    <input type="text" id="name_file" placeholder="Название файла"/>
+                                </div>
+                            </div>
+                            <div>
+                                <p>Издательство</p>
+                                <div>
+                                    <div/>
+                                    <input type="text" id="publisher" placeholder="Издательство"/>
+                                </div>
+                            </div>
+                            <div>
+                                <p>Серия</p>
+                                <div>
+                                    <div/>
+                                    <input type="text" id="sequence" placeholder="Серия"/>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <p>Название книги</p>
-                            <input type="text" id="name_book" placeholder="Название книги"/>
-                        </div>
-                        <div>
-                            <p>Название файла</p>
-                            <input type="text" id="name_file" placeholder="Название файла"/>
-                        </div>
-                        <div>
-                            <p>Имя</p>
-                            <input type="text" id="first_name" placeholder="Имя"/>
-                        </div>
-                        <div>
-                            <p>Фамилия</p>
-                            <input type="text" id="last_name" placeholder="Фамилия"/>
-                        </div>
-                        <div>
-                            <p>Издательство</p>
-                            <input type="text" id="publisher" placeholder="Издательство"/>
-                        </div>
-                        <div>
-                            <p>Место издания</p>
-                            <input type="text" id="city" placeholder="Место издания"/>
-                        </div>
-                        <div>
-                            <p>Серия</p>
-                            <input type="text" id="sequence" placeholder="Серия"/>
-                        </div>
-                        <button type="button" onClick={handleClick}>Скачать файл</button>
+
                     </div>
                     {/* <form>
                         <label for="city">Жанр</label>
