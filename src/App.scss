@@ -102,6 +102,7 @@ main{
                     border-top-left-radius: 0px;
                     border-bottom-left-radius: 0px;
                     padding-left: 8px;
+                    font-size: 18px;
                 }
                 >div:nth-child(1){
                     width: 516px;
@@ -247,6 +248,8 @@ main{
             align-items: center;
             border: 1px solid black;
             border-radius: 2px;
+            overflow: auto;
+            overflow-y:hidden;
             >div{
                 display: flex;
                 align-items: center;
@@ -280,6 +283,7 @@ main{
                 border-radius: 5px;
                 background: none;
                 width: 50px;
+                min-width: 50px;
                 height: 48px;
                 font-size: 30px;
                 padding-bottom: 2px;
