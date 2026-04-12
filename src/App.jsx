@@ -7,6 +7,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
+import logo from './Main_assets/Name.png'
 
 export default function App() {
     const [genres, setGenres] = useState(['']);
@@ -31,7 +32,19 @@ export default function App() {
     const paginationRef = useRef(null);
     const chapterPaginationRef = useRef([]);
     const chapterSwiperRef = useRef([]);
+    const [isOpen, setIsOpen] = useState(false);
+    const [openMenu, setOpenMenu] = useState(null);
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+          e.preventDefault();
+        };
 
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+          window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
     useEffect(() => {
         const el = paginationRef.current;
         if (!el) return;
@@ -53,7 +66,6 @@ export default function App() {
         const btn = e.target.closest(".delete-chapter");
         if (!btn) return;
 
-        // ищем, к какому тому принадлежит эта пагинация
         const paginationEl = btn.closest("[data-tom]");
         if (!paginationEl) return;
 
@@ -446,6 +458,18 @@ export default function App() {
         return copy;
       });
     };
+    const addTextbotton = (tomIndex, chapterIndex, textIndex) => {
+      setTextfb(prev => {
+        const copy = [...prev];
+
+        const arr = [...copy[tomIndex][chapterIndex]];
+        arr.splice(textIndex + 1, 0, { text: '' });
+
+        copy[tomIndex][chapterIndex] = arr;
+
+        return copy;
+      });
+    };
 
     const removeText = (tomIndex, chapterIndex, textIndex) => {
       setTextfb(prev => {
@@ -556,38 +580,38 @@ export default function App() {
         const city = document.getElementById('city').value;
         const sequence = document.getElementById('sequence').value;
         const content = `<?xml version="1.0" encoding="UTF-8"?>
-            <FictionBook xmlns="http://www.gribuser.ru/xml/fictionbook/2.0">
-                <description>
-                    <title-info>
-                        ${Genrefb2()}
-                        <author>  
-                            <first-name>${first_name}</first-name>
-                            <last-name>${last_name}</last-name>
-                        </author>
-                        <book-title></book-title>
-                        <coverpage>
-                            <image l:href="#cover.jpg"/>
-                        </coverpage>
-                        <annotation>
-                            ${Annofb2()}
-                        </annotation>
-                    </title-info>
-                    <keywords>${keywords}</keywords>
-                    <date>${date || currentDate}</date>
-                </description>
-                <publish-info>
-                    <book-name>${name_book}</book-name>
-                    <publisher>${publisher}</publisher>
-                    <city>${city}</city>
-                    <sequence>${sequence}</sequence>
-                </publish-info>
-                <binary id="cover.jpg" content-type="image/jpeg">
-                  ${imageData}
-                </binary>
-                <body>
-                    ${Tomfb2()}
-                </body>
-            </FictionBook>`;
+<FictionBook xmlns="http://www.gribuser.ru/xml/fictionbook/2.0">
+    <description>
+        <title-info>
+            ${Genrefb2()}
+            <author>  
+                <first-name>${first_name}</first-name>
+                <last-name>${last_name}</last-name>
+            </author>
+            <book-title></book-title>
+            <coverpage>
+                <image l:href="#cover.jpg"/>
+            </coverpage>
+            <annotation>
+                ${Annofb2()}
+            </annotation>
+        </title-info>
+        <keywords>${keywords}</keywords>
+        <date>${date || currentDate}</date>
+    </description>
+    <publish-info>
+        <book-name>${name_book}</book-name>
+        <publisher>${publisher}</publisher>
+        <city>${city}</city>
+        <sequence>${sequence}</sequence>
+    </publish-info>
+    <binary id="cover.jpg" content-type="image/jpeg">
+      ${imageData}
+    </binary>
+    <body>
+        ${Tomfb2()}
+    </body>
+</FictionBook>`;
         const blob = new Blob([content], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -604,6 +628,7 @@ export default function App() {
 
     return (
         <main>
+            <img src={logo} alt="" />
             <div>
                 <div>
                     <div>
@@ -614,7 +639,7 @@ export default function App() {
                                 <button  onClick={() => {const index = tomSwiperRef.current?.activeIndex; addTom(index);}}>+</button>
                             </div>
                         </div>
-                        <Swiper modules={[Navigation, Pagination, Scrollbar, A11y, Mousewheel]} initialSlide={1} onSwiper={(s) => (tomSwiperRef.current = s)} onSlideChange={(swiper) => {tomSwiperRef.current = swiper}} pagination={{el: paginationRef.current, clickable: true, renderBullet: (i, className) => {return `<div class="${className}"> <span>${i + 1}</span> <button data-delete="${i}">&#215;</button> </div>`}}} onBeforeInit={(swiper) => {swiper.params.pagination.el = paginationRef.current;}} spaceBetween={50} slidesPerView={1} navigation = {false}  direction='horizontal' allowTouchMove = {false}>
+                        <Swiper modules={[Navigation, Pagination, Scrollbar, A11y, Mousewheel]} initialSlide={0} onSwiper={(s) => (tomSwiperRef.current = s)} onSlideChange={(swiper) => {tomSwiperRef.current = swiper}} pagination={{el: paginationRef.current, clickable: true, renderBullet: (i, className) => {return `<div class="${className}"> <span>${i + 1}</span> <button data-delete="${i}">&#215;</button> </div>`}}} onBeforeInit={(swiper) => {swiper.params.pagination.el = paginationRef.current;}} spaceBetween={50} slidesPerView={1} navigation = {false}  direction='horizontal' allowTouchMove = {false}>
                             {tom.map((tomItem, tomIndex) => (
                             <SwiperSlide>
                                 <div key={tomIndex} className="tom">
@@ -626,30 +651,53 @@ export default function App() {
                                         </div>
                                     </div>
                                     
-                                    <Swiper modules={[Navigation, Pagination, Scrollbar, A11y, Mousewheel]} initialSlide={1} onSwiper={(s) => (chapterSwiperRef.current[tomIndex] = s)} onSlideChange={(swiper) => {chapterSwiperRef.current = swiper}} pagination={{el: chapterPaginationRef.current[tomIndex], clickable: true, renderBullet: (i, className) => {return `<div class="${className}"> <span>${i + 1}</span> <button class="delete-chapter" data-index="${i}">&#215;</button> </div>`}}} onBeforeInit={(swiper) => {swiper.params.pagination.el = chapterPaginationRef.current[tomIndex]}} spaceBetween={50} slidesPerView={1} navigation = {false}  direction='horizontal' allowTouchMove = {false}>
+                                    <Swiper modules={[Navigation, Pagination, Scrollbar, A11y, Mousewheel]} initialSlide={0} onSwiper={(s) => (chapterSwiperRef.current[tomIndex] = s)} onSlideChange={(swiper) => {chapterSwiperRef.current = swiper}} pagination={{el: chapterPaginationRef.current[tomIndex], clickable: true, renderBullet: (i, className) => {return `<div class="${className}"> <span>${i + 1}</span> <button class="delete-chapter" data-index="${i}">&#215;</button> </div>`}}} onBeforeInit={(swiper) => {swiper.params.pagination.el = chapterPaginationRef.current[tomIndex]}} spaceBetween={50} slidesPerView={1} navigation = {false}  direction='horizontal' allowTouchMove = {false}>
                                         {chapters[tomIndex]?.map((chapter, chapterIndex) => (
                                             <SwiperSlide>
                                                 <div key={chapterIndex} className="chapter">
                                                     <div>
-                                                        <textarea value={tomItem.tom} onChange={e => updateTom(tomIndex, 'tom', e.target.value)} placeholder="Том"/>
-                                                        <textarea value={chapter.chapter} onChange={e => updateChapter(tomIndex, chapterIndex, 'chapter', e.target.value)} placeholder="Заголовок"/>
+                                                        <textarea value={tomItem.tom} onChange={e => updateTom(tomIndex, 'tom', e.target.value)} placeholder="Название тома"/>
+                                                        <textarea value={chapter.chapter} onChange={e => updateChapter(tomIndex, chapterIndex, 'chapter', e.target.value)} placeholder="Название главы"/>
                                                     </div>
-                                                    {textfb[tomIndex][chapterIndex]?.map((textItem, textIndex) => (
-                                                        <div key={textIndex} className="texts">
-                                                            <div>
-                                                                <textarea value={textItem.text} ref={el => {if (!textareaRefs.current[tomIndex]) {textareaRefs.current[tomIndex] = []} if (!textareaRefs.current[tomIndex][chapterIndex]) {textareaRefs.current[tomIndex][chapterIndex] = []} textareaRefs.current[tomIndex][chapterIndex][textIndex] = el}} onChange={e => updateText(tomIndex, chapterIndex, textIndex, 'text', e.target.value)} placeholder="Текст" />
-                                                                <button onClick={() => removeText(tomIndex, chapterIndex, textIndex)}>&#215;</button>
-                                                            </div>
-                                                            <button onClick={() => addText(tomIndex, chapterIndex)}>+</button>
+                                                    <div>
+                                                        {textfb[tomIndex][chapterIndex]?.map((textItem, textIndex) => (
+                                                            <div key={textIndex} className="texts">
+                                                                <div>
+                                                                    <textarea value={textItem.text} ref={el => {if (!textareaRefs.current[tomIndex]) {textareaRefs.current[tomIndex] = []} if (!textareaRefs.current[tomIndex][chapterIndex]) {textareaRefs.current[tomIndex][chapterIndex] = []} textareaRefs.current[tomIndex][chapterIndex][textIndex] = el}} onChange={e => updateText(tomIndex, chapterIndex, textIndex, 'text', e.target.value)} placeholder="Новый абзац" />
+                                                                    <button onClick={() => removeText(tomIndex, chapterIndex, textIndex)}>&#215;</button>
+                                                                </div>
+                                                                <div>
+                                                                    <button
+                                                                      onClick={() =>
+                                                                        setOpenMenu(prev =>
+                                                                          prev === `${tomIndex}-${chapterIndex}-${textIndex}`
+                                                                            ? null
+                                                                            : `${tomIndex}-${chapterIndex}-${textIndex}`
+                                                                        )
+                                                                      }
+                                                                    >
+                                                                      |||
+                                                                    </button>
+                                                                    <div>
+                                                                        {openMenu === `${tomIndex}-${chapterIndex}-${textIndex}` && (
+                                                                            <div>
+                                                                                <button onClick={() => addTextbotton(tomIndex, chapterIndex, textIndex)}>+</button>
+                                                                                <button onClick={() => wrapTextWithStrong(tomIndex, chapterIndex, textIndex)}>Strong</button>
+                                                                                <button onClick={() => wrapTextWithEmphasis(tomIndex, chapterIndex, textIndex)}>Emphasis</button>
+                                                                                <button onClick={() => wrapTextWithLink(tomIndex, chapterIndex, textIndex)}>Link</button>
+                                                                                <button onClick={() => wrapTextWithSub(tomIndex, chapterIndex, textIndex)}>Sub</button>
+                                                                                <button onClick={() => wrapTextWithSup(tomIndex, chapterIndex, textIndex)}>Sup</button>
+                                                                                <button onClick={() => wrapTextWithStrikethrough(tomIndex, chapterIndex, textIndex)}>Strikethrough</button>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
 
-                                                            <button onClick={() => wrapTextWithStrong(tomIndex, chapterIndex, textIndex)}>Strong</button>
-                                                            <button onClick={() => wrapTextWithEmphasis(tomIndex, chapterIndex, textIndex)}>Emphasis</button>
-                                                            <button onClick={() => wrapTextWithLink(tomIndex, chapterIndex, textIndex)}>Link</button>
-                                                            <button onClick={() => wrapTextWithSub(tomIndex, chapterIndex, textIndex)}>Sub</button>
-                                                            <button onClick={() => wrapTextWithSup(tomIndex, chapterIndex, textIndex)}>Sup</button>
-                                                            <button onClick={() => wrapTextWithStrikethrough(tomIndex, chapterIndex, textIndex)}>Strikethrough</button>
-                                                        </div>
-                                                    ))}
+                                                                </div>
+
+                                                            </div>
+                                                        ))}
+                                                        <button onClick={() => addText(tomIndex, chapterIndex)}>+</button>
+                                                    </div>
 
                                                 </div>
                                             </SwiperSlide>
@@ -698,19 +746,17 @@ export default function App() {
                                 </div>
                             </div>
                             <div>
+                                <p>Имя</p>
                                 <div>
-                                    <p>Имя</p>
-                                    <div>
-                                        <div/>
-                                        <input type="text" id="first_name" placeholder="Имя"/>
-                                    </div>
+                                    <div/>
+                                    <input type="text" id="first_name" placeholder="Имя"/>
                                 </div>
+                            </div>
+                            <div>
+                                <p>Фамилия</p>                                
                                 <div>
-                                    <p>Фамилия</p>                                
-                                    <div>
-                                        <div/>
-                                        <input type="text" id="last_name" placeholder="Фамилия"/>
-                                    </div>
+                                    <div/>
+                                    <input type="text" id="last_name" placeholder="Фамилия"/>
                                 </div>
                             </div>
                             <div>
@@ -720,11 +766,6 @@ export default function App() {
                                     <input type="text" id="city" placeholder="Место издания"/>
                                 </div>
                             </div>
-                            <div>
-                                <div />
-                                <button type="button" onClick={handleClick}>СОЗДАТЬ FB2</button>
-                            </div>
-
                         </div>
                         <div>
                             <div>
@@ -758,6 +799,7 @@ export default function App() {
                         </div>
 
                     </div>
+                    <button type="button" onClick={handleClick}>СОЗДАТЬ FB2</button>
                     {/* <form>
                         <label for="city">Жанр</label>
                         <select id="city" name="city">

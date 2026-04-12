@@ -1,0 +1,502 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+// ===== VARIABLES =====
+$bg: #f5f7fb;
+$card: #ffffff;
+$border: #e2e8f0;
+$text: #1e293b;
+$accent: #6366f1;
+$accent-hover: #4f46e5;
+$danger: #ef4444;
+
+$radius: 10px;
+$transition: 0.2s ease;
+
+// ===== RESET =====
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+}
+
+// ===== BASE =====
+main {
+    min-height: 100vh;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    background: $bg;
+
+    > div {
+        width: 100%;
+        max-width: 1300px;
+        background: $card;
+        border-radius: $radius;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+
+        > div {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+    }
+}
+
+// ===== INPUTS =====
+input, textarea {
+    width: 100%;
+    border: 1px solid $border;
+    border-radius: $radius;
+    padding: 10px 12px;
+    font-size: 16px;
+    transition: $transition;
+    outline: none;
+
+    &:focus {
+        border-color: $accent;
+        box-shadow: 0 0 0 2px rgba(99,102,241,0.1);
+    }
+}
+
+// ===== BUTTONS =====
+button {
+    cursor: pointer;
+    border-radius: $radius;
+    border: 1px solid $border;
+    background: white;
+    transition: $transition;
+    padding: 6px 10px;
+
+    &:hover {
+        background: #f1f5f9;
+    }
+
+    &:active {
+        transform: scale(0.97);
+    }
+}
+
+button.plus {
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button.danger {
+    color: $danger;
+
+    &:hover {
+        background: rgba(239,68,68,0.1);
+    }
+}
+
+// ===== TOP SECTION =====
+main > div > div > div:nth-child(1) {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+// ===== TOM =====
+.tom {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid $border;
+    border-radius: $radius;
+    background: #fafafa;
+
+    > div:nth-child(1) {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        font-size: 20px;
+
+        > div {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            overflow-x: auto;
+        }
+    }
+}
+
+// ===== CHAPTER =====
+.chapter {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: $radius;
+    background: white;
+    border: 1px solid $border;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    > div:nth-child(1) {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        textarea {
+            text-align: center;
+            font-weight: 500;
+        }
+    }
+}
+
+// ===== TEXT BLOCKS =====
+.texts {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 10px;
+
+    > div {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    textarea {
+        min-height: 60px;
+        resize: vertical;
+    }
+
+    button {
+        font-size: 14px;
+    }
+}
+
+// ===== FORM SECTION =====
+main > div > div > div:nth-child(2) {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+
+    > div {
+        flex: 1;
+        min-width: 280px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    p {
+        font-size: 14px;
+        color: #64748b;
+    }
+}
+
+// ===== SUB INPUT GROUP =====
+main input {
+    height: 45px;
+}
+
+// ===== FILE INPUT =====
+input[type="file"] {
+    border: none;
+}
+
+// ===== IMAGE TEXTAREA =====
+textarea[readonly] {
+    background: #f1f5f9;
+    font-size: 12px;
+}
+
+// ===== SWIPER PAGINATION =====
+.swiper-pagination-bullet {
+    background: transparent;
+    border: 1px solid $border;
+    border-radius: $radius;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.swiper-pagination-bullet-active {
+    background: $accent;
+    color: white;
+}
+
+// ===== FINAL BUTTON =====
+main button[type="button"] {
+    margin-top: 20px;
+    align-self: center;
+    width: 250px;
+    height: 55px;
+    font-size: 18px;
+    font-weight: 600;
+    background: $accent;
+    color: white;
+    border: none;
+
+    &:hover {
+        background: $accent-hover;
+    }
+}
+// ===== SWIPER FIX =====
+.swiper {
+    width: 100%;
+    overflow: hidden;
+}
+
+.swiper-wrapper {
+    align-items: stretch;
+}
+
+.swiper-slide {
+    width: 100% !important;
+    display: flex;
+    justify-content: center;
+}
+
+// чтобы контент не растягивал слайд
+.swiper-slide > * {
+    width: 100%;
+    max-width: 100%;
+}
+
+// ===== PAGINATION (ТОМ / ГЛАВА) =====
+.swiper-pagination {
+    position: static !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+// сам bullet
+.swiper-pagination-bullet {
+    flex: 0 0 auto;
+    background: #e2e8f0;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.2s;
+}
+
+// активный
+.swiper-pagination-bullet-active {
+    background: #6366f1;
+    color: white;
+}
+
+// кнопка удаления внутри bullet
+.swiper-pagination-bullet button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: inherit;
+    opacity: 0.6;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+// контейнер pagination (ты его через ref прокидываешь)
+[data-tom],
+main > div > div > div:nth-child(1) > div:nth-child(1) > div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    overflow-x: auto;
+}
+
+// bullet = таб
+.swiper-pagination-bullet {
+    all: unset;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #e2e8f0;
+    font-size: 14px;
+    color: #475569;
+    transition: 0.2s;
+
+    span {
+        font-weight: 500;
+    }
+
+    button {
+        all: unset;
+        cursor: pointer;
+        font-size: 14px;
+        opacity: 0.5;
+
+        &:hover {
+            opacity: 1;
+            color: #ef4444;
+        }
+    }
+}
+
+// активный таб
+.swiper-pagination-bullet-active {
+    background: #6366f1;
+    color: white;
+}
+.texts {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    // строка с textarea + крестик
+    > div {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    textarea {
+        min-height: 50px;
+    }
+
+    // контейнер кнопок
+    > button {
+        width: fit-content;
+        height: 32px;
+        padding: 0 10px;
+        font-size: 13px;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+
+        &:hover {
+            background: #e2e8f0;
+        }
+    }
+}
+// ===== TABS (ТОМ / ГЛАВА) =====
+[data-tom],
+main > div > div > div:nth-child(1) > div:nth-child(1) > div {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 6px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    background: #f8fafc;
+
+    overflow-x: auto;
+}
+
+// каждый таб
+.swiper-pagination-bullet {
+    all: unset;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 6px 12px;
+    border-radius: 8px;
+
+    font-size: 14px;
+    color: #475569;
+
+    background: transparent;
+    border: 1px solid transparent;
+    transition: 0.2s;
+}
+
+// hover
+.swiper-pagination-bullet:hover {
+    background: #e2e8f0;
+}
+
+// активный таб
+.swiper-pagination-bullet-active {
+    background: white;
+    border-color: #6366f1;
+    color: #6366f1;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+// номер
+.swiper-pagination-bullet span {
+    font-weight: 500;
+}
+
+// крестик
+.swiper-pagination-bullet button {
+    all: unset;
+    cursor: pointer;
+    font-size: 13px;
+    opacity: 0.5;
+
+    &:hover {
+        opacity: 1;
+        color: #ef4444;
+    }
+}
+.swiper-pagination-bullet {
+    all: unset !important;
+
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+
+    width: auto !important;
+    height: auto !important;
+
+    padding: 4px 10px;
+    border-radius: 999px !important;
+
+    font-size: 13px;
+    line-height: 1;
+
+    background: #e2e8f0;
+    color: #475569;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+.swiper-pagination-bullet-active {
+    background: #6366f1 !important;
+    color: white !important;
+
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.swiper-pagination-bullet button {
+    all: unset;
+
+    margin-left: 6px;
+    font-size: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 14px;
+    height: 14px;
+
+    border-radius: 50%;
+
+    opacity: 0.6;
+
+    &:hover {
+        background: rgba(0,0,0,0.1);
+        opacity: 1;
+    }
+}

@@ -8,28 +8,34 @@ main{
     width: 100%;
     height: 3099px;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
-    background-image: url(./Main_assets/scribble_light.png);
+    background-color: #f5f7fb;
+    flex-direction: column;
     >div{
         background-color: white;
-        width: 1449px;
+        width: 1200px;
         height: 2704px;
         display: flex;
         justify-content: center;
         align-items: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        border-radius: 10px;
         >div{
             display: flex;
             justify-content: space-between;
             flex-direction: column;
             align-items: center;
-            width: 1248px;
+            width: 1050px;
             height: 2195px;
             >div:nth-child(1){
-                width: 1248px;
+                width: 1050px;
                 height: 1254px;
                 display: flex;
                 flex-direction: column;
+                button{
+                    cursor: pointer;
+                }
                 >div:nth-child(1){
                     width: 100%;
                     height: 108px;
@@ -46,11 +52,19 @@ main{
                         margin-top: 20px;
                         overflow: auto;
                         overflow-y:hidden;
+                        border-radius: 5px;
                         >div{
                             display: flex;
                             width: auto;
                             height: 48px;
                             margin-left: 5px;
+                            .swiper-pagination-bullet-active {
+                                background: #637384 !important;
+                                color: white !important;
+                                >button{
+                                    color: white;
+                                }
+                            }
                             >div{
                                 width: 76px;
                                 height: 46px;
@@ -60,6 +74,7 @@ main{
                                 justify-content: space-between;
                                 align-items: center;
                                 background: none;
+                                border-radius: 5px;
                                 >span{
                                     padding-left: 12px;
                                 }
@@ -69,6 +84,7 @@ main{
                                     border: none;
                                     font-size: 20px;
                                 }
+
                             }
                         }
                         >button{
@@ -81,11 +97,15 @@ main{
                             height: 48px;
                             font-size: 30px;
                             padding-bottom: 2px;
+                            &:hover {
+                                transition: 0.2s ease;
+                                background: #D8DDE4 !important;
+                            }
                         }
                     }
                 }
                 >div:nth-child(2){
-                    max-width: 1248px;
+                    max-width: 1050px;
                 }
             }
             >div:nth-child(2){
@@ -96,148 +116,103 @@ main{
                 font-size: 18px;
                 input{
                     width: 100%;
-                    height: 83px;
+                    height: 40px;
                     border-radius: 2px;
                     border: 1px solid #D8DDE4;
                     border-top-left-radius: 0px;
                     border-bottom-left-radius: 0px;
-                    padding-left: 8px;
+                    padding-left: 20px;
                     font-size: 18px;
+                    
                 }
+                input:focus-visible{
+                    border-radius: 1px;
+                    outline: 2px solid black;
+                    border: 1px solid white;
+                }
+
                 >div:nth-child(1){
-                    width: 516px;
-                    height: 654px;
+                    width: 480px;
                     display: flex;
                     flex-direction: column;
-                    justify-content: space-between;
                     >div{
+                        padding-top: 35px;
                         width: 100%;
-                        height: 123px;
                         display: flex;
                         flex-direction: column;
                         justify-content: space-between;
                         >div{
                             margin-top: 10px;
-                            height: 83px;
+                            height: 40px;
                             display: flex;
+                            align-items: center;
 
                             >div{
                                 width: 11px;
-                                height: 83px;
+                                height: 40px;
                                 border: 1px solid #D8DDE4;
-                                border-radius: 2px;
                                 background-color: #D8DDE4;
-                                border-top-right-radius: 0px;
-                                border-bottom-right-radius: 0px;
-
-                            }
-                        }
-                    }
-                    >div:nth-child(3){
-                        width: 100%;
-                        height: 123px;
-                        display: flex;
-                        flex-direction: row;
-                        justify-content: space-between;
-                        align-items: center;
-                        >div{
-                            width: 244px;
-                            height: 123px;
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: space-between;
-
-                            >div{
-                                margin-top: 10px;
-                                height: 83px;
-                                display: flex;
-                                width: 244px;
-                                >div{
-                                    width: 11px;
-                                    height: 83px;
-                                    border: 1px solid #D8DDE4;
-                                    border-radius: 2px;
-                                    background-color: #D8DDE4;
-                                    border-top-right-radius: 0px;
-                                    border-bottom-right-radius: 0px;
-                                }
+                                border-top-left-radius: 2px;
+                                border-bottom-left-radius: 2px;
+                                position: absolute; 
                             }
                         }
                     }
 
-                    >div:nth-child(5){
-                        width: 244px;
-                        height: 83px;
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
-                        >div{
-                            width: 11px;
-                            height: 83px;
-                            border: 1px solid #FC575E66;
-                            border-radius: 2px;
-                            background-color: #FC575E66;
-                            border-top-right-radius: 0px;
-                            border-bottom-right-radius: 0px;
-                            margin: 0;
-                            position: absolute;
-                        }
-                        >button{
-                            width: 100%;
-                            height: 83px;
-                            background-color: #FC575E66;
-                            color: #FC575E;
-                            font-size: 25px;
-                            font-weight: bold;
-                            text-transform: uppercase;
-                            border: none;
-                            border-radius: 2px;
-                            border-top-left-radius: 0px;
-                            border-bottom-left-radius: 0px;
-                        }
-                    }
                 }
                 >div:nth-child(2){
-                    width: 516px;
+                    width: 480px;
                     height: 552px;
                     display: flex;
                     flex-direction: column;
-                    justify-content: space-between;
                     >div{
                         width: 100%;
-                        height: 123px;
                         display: flex;
                         flex-direction: column;
-                        justify-content: space-between;
+                        padding-top: 35px;
                         >div{
                             margin-top: 10px;
-                            height: 83px;
+                            height: 40px;
                             display: flex;
 
                             >div{
                                 width: 11px;
-                                height: 83px;
+                                height: 40px;
                                 border: 1px solid #D8DDE4;
-                                border-radius: 2px;
+                                border-top-left-radius: 2px;
+                                border-bottom-left-radius: 2px;
                                 background-color: #D8DDE4;
                                 border-top-right-radius: 0px;
                                 border-bottom-right-radius: 0px;
-
+                                position: absolute;
                             }
                         }
                     }
                 }
             }
+            >button:nth-child(3){
+                width: 244px;
+                height: 82px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #637384;
+                color: white;
+                border-radius: 5px;
+                font-size: 25px;
+                font-weight: bold;
+                border: none;
+                cursor: pointer;
+            }
         }
     }
 }
 .tom{
-    width: 1248px;
+    width: 1050x;
     height: 1205px;
     >div:nth-child(1){
         margin-top: 20px;
         width: 100%;
-        height: 108px;
         display: flex;
         justify-content: space-between;
         flex-direction: column;
@@ -250,12 +225,20 @@ main{
             border-radius: 2px;
             overflow: auto;
             overflow-y:hidden;
+            margin-top: 10px;
             >div{
                 display: flex;
                 align-items: center;
                 width: auto;
                 height: 48px;
                 margin-left: 5px;
+                .swiper-pagination-bullet-active {
+                    background: #637384 !important;
+                    color: white !important;
+                    >button{
+                        color: white;
+                    }
+                }
                 >div{
                     width: 76px;
                     height: 46px;
@@ -265,6 +248,7 @@ main{
                     justify-content: space-between;
                     align-items: center;
                     background: none;
+                    border-radius: 5px;
                     >span{
                         margin-left: 12px;
                     }
@@ -287,26 +271,23 @@ main{
                 height: 48px;
                 font-size: 30px;
                 padding-bottom: 2px;
-                
+                &:hover {
+                    transition: 0.2s ease;
+                    background: #D8DDE4 !important;
+                }
             }
         }
     }
 }
 .chapter{
-    width: 1246px;
-    height: 900px;
-    border: 1px solid black;
-    border-radius: 5px;
+    width: 1048px;
+    height: 1100px;
     margin-top: 20px;
-    overflow: auto;
     >div:nth-child(1){
         display: flex;
-        flex-direction: column;
-        justify-content: space-between;
         align-items: center;
         width: 100%;
-        height: 111px;
-        margin-top: 17px;
+        margin-top: 20px;
         >textarea{
             width: 339px;
             height: 48px;
@@ -319,48 +300,106 @@ main{
             min-height: 48px;
             max-height: 48px;
             min-width: 339px;
-            max-width: 1246px;
+            max-width: 520px;
+        }
+        >textarea:nth-child(2){
+            margin-left: 10px;
         }
     }
     >div:nth-child(2){
-        margin-top: 25px;
+        width: 1048px;
+        height: 800px;
+        border: 1px solid black;
+        border-radius: 5px;
+        margin-top: 20px;
+        overflow: auto;
+
+        >button{
+            border: 1px solid black;
+            border-radius: 5px;
+            background: none;
+            width: 30px;
+            height: 30px;
+            font-size: 20px;
+            padding-bottom: 2px;
+            margin-left: 10px;
+            margin-top: 10px;
+            &:hover {
+                transition: 0.2s ease;
+                background: #D8DDE4 !important;
+            }
+        }
     }
-    >.texts{
+    .texts{
         padding-left: 10px;
-        padding-top: 15px;
+        padding-top: 10px;
         display: flex;
-        align-items: center;
-        >div{
+        >div:nth-child(1){
             display: flex;
-            align-items: center;
             >textarea{
                 width: 339px;
-                height: 48px;
+                height: 43px;
                 font-size: 18px;
-                min-height: 48px;
+                min-height: 43px;
                 max-height: 300px;
                 min-width: 339px;
-                max-width: 800px;
+                max-width: 960px;
                 border-radius: 2px;
+                padding-left: 5px;
+                padding-top: 5px;
             }
-            button {
+            >button {
                 position: relative;
                 right: 20px;
                 background: none;
                 border: none;
                 font-size: 20px;
+                width: 20px;
+                height: 20px;
+                color: #637384;
             }
         }
-        >button:nth-child(2){
-            margin-left: 5px;
-            border: 1px solid black;
-            border-radius: 5px;
-            background: none;
-            width: 50px;
-            height: 48px;
-            font-size: 30px;
-            padding-bottom: 2px;
-            
+        >div:nth-child(2){
+            position: relative;
+            right: 10px;
+            button:hover {
+                transition: 0.2s ease;
+                background: #D8DDE4 !important;
+            }
+            button{
+                border: 1px solid black;
+                border-radius: 5px;
+                background: white;
+                width: 50px;
+                height: 50px;
+            }
+            >button{
+                font-size: 25px;
+                rotate: 90deg;
+            }
+            >div{
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: center;
+                position: absolute;
+                z-index: 100;
+                background-color: white !important;
+                >div{
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
+                    align-items: center;
+                    >button{
+                        margin-top: 10px;
+                    }
+                    >button:nth-child(1){
+                        font-size: 30px;
+                        padding-bottom: 2px;
+
+                    }
+                }
+            }
         }
     }
 }
