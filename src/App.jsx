@@ -8,6 +8,14 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import logo from './Main_assets/Name.png'
+import bold from './Main_assets/bold.svg'
+import Italic from './Main_assets/Italic.svg'   
+import Underlining from './Main_assets/Underlining.png'
+import Strikethrough from './Main_assets/Strikethrough.svg'
+import Link from './Main_assets/Link.svg'
+import up from './Main_assets/up.svg'
+import down from './Main_assets/down.svg'
+import arrow from './Main_assets/Arrow-down.svg'
 
 export default function App() {
     const [genres, setGenres] = useState(['']);
@@ -137,7 +145,6 @@ export default function App() {
         const newGenre = genres.filter((_, i) => i !== index);
         setGenres(newGenre);
     };
-
     const addAnno = () => {
         setAnnota([...annota, '']);
     };
@@ -156,7 +163,7 @@ export default function App() {
     };
     const removeAnno = (annoIndex) => {
         const newAnno = annota.filter((_, i) => i !== annoIndex);
-        setGenres(newAnno);
+        setAnnota(newAnno);
     };
 
     const wrapTextWithStrong = (tomIndex, chapterIndex, textIndex) => {
@@ -670,9 +677,7 @@ export default function App() {
                                                                     <button
                                                                       onClick={() =>
                                                                         setOpenMenu(prev =>
-                                                                          prev === `${tomIndex}-${chapterIndex}-${textIndex}`
-                                                                            ? null
-                                                                            : `${tomIndex}-${chapterIndex}-${textIndex}`
+                                                                          prev === `${tomIndex}-${chapterIndex}-${textIndex}` ? null : `${tomIndex}-${chapterIndex}-${textIndex}`
                                                                         )
                                                                       }
                                                                     >
@@ -682,13 +687,12 @@ export default function App() {
                                                                         {openMenu === `${tomIndex}-${chapterIndex}-${textIndex}` && (
                                                                             <div>
                                                                                 <button onClick={() => addTextbotton(tomIndex, chapterIndex, textIndex)}>+</button>
-                                                                                <button onClick={() => wrapTextWithStrong(tomIndex, chapterIndex, textIndex)}>Strong</button>
-                                                                                <button onClick={() => wrapTextWithEmphasis(tomIndex, chapterIndex, textIndex)}>Emphasis</button>
-                                                                                <button onClick={() => wrapTextWithLink(tomIndex, chapterIndex, textIndex)}>Link</button>
-                                                                                <button onClick={() => wrapTextWithSub(tomIndex, chapterIndex, textIndex)}>Sub</button>
-                                                                                <button onClick={() => wrapTextWithSup(tomIndex, chapterIndex, textIndex)}>Sup</button>
-                                                                                <button onClick={() => wrapTextWithStrikethrough(tomIndex, chapterIndex, textIndex)}>Strikethrough</button>
-                                                                            </div>
+                                                                                <button onClick={() => wrapTextWithStrong(tomIndex, chapterIndex, textIndex)}> <img src={bold} alt="" /> </button>
+                                                                                <button onClick={() => wrapTextWithEmphasis(tomIndex, chapterIndex, textIndex)}> <img src={Italic} alt="" /></button>
+                                                                                <button onClick={() => wrapTextWithLink(tomIndex, chapterIndex, textIndex)}> <img src={Link} alt="" /></button>
+                                                                                <button onClick={() => wrapTextWithStrikethrough(tomIndex, chapterIndex, textIndex)}> <img src={Strikethrough} alt="" /></button>
+                                                                                <button onClick={() => wrapTextWithSup(tomIndex, chapterIndex, textIndex)}> <img src={up} alt="" /></button>
+                                                                                <button onClick={() => wrapTextWithSub(tomIndex, chapterIndex, textIndex)}> <img src={down} alt="" /></button>                                                                            </div>
                                                                         )}
                                                                     </div>
 
@@ -713,23 +717,161 @@ export default function App() {
                             <textarea  value={imageData} readOnly />
                         </div>
                     </div>
-                    {/* <p>Жанры:</p>
-                    {genres.map((genre, index) => (
-                        <div key={index}>
-                            <input type="text" placeholder="Жанр" value={genre} onChange={(e) => updateGenre(index, e.target.value)}/>
-                            <button onClick={() => removeGenre(index)}>Удалить жанр</button>
-                        </div>
-                    ))}
-                    <button type="button" onClick={addGenre}>+ Добавить жанр</button> */}
+
                     <div>
-                        {/* {annota.map((annoItem, annoIndex) => (
-                            <div key={annoIndex}>
-                                <p>Аннотация</p>
-                                <div>
+                        <p>Аннотация</p>
+                        <div>
+                            {annota.map((annoItem, annoIndex) => (
+                                <div key={annoIndex}>
                                     <textarea value={annoItem} onChange={(e) => updateAnno(annoIndex, e.target.value)} placeholder="Аннотация"/>
                                 </div>
-                            </div>
-                        ))} */}
+                            ))}
+                            <button onClick={() => addAnno()}>+</button>
+                        </div>
+                    </div>
+                    <div>
+                        <p>Жанры:</p>
+                        <div>
+                            {genres.map((genre, index) => (
+                                <div key={index}>
+                                    <select value={genre} onChange={(e) => updateGenre(index, e.target.value)}>
+                                        <option value=""></option>
+                                        <option value="sf_history">Альтернативная история</option>
+                                        <option value="sf_action">Боевая Фантастика</option>
+                                        <option value="sf_epic">Эпическая Фантастика</option>
+                                        <option value="sf_heroic">Героическая фантастика</option>
+                                        <option value="sf_detective">Детективная Фантастика</option>
+                                        <option value="sf_cyberpunk">Киберпанк</option>
+                                        <option value="sf_space">Космическая Фантастика</option>
+                                        <option value="sf_social">Социальная фантастика</option>
+                                        <option value="sf_horror">Ужасы и Мистика</option>
+                                        <option value="sf_humor">Юмористическая фантастика</option>
+                                        <option value="sf_fantasy">Фэнтези</option>
+                                        <option value="sf">Научная Фантастика</option>
+                                        <option value="child_sf">Детская Фантастика</option>
+                                        <option value="det_classic">Классический Детектив</option>
+                                        <option value="det_police">Полицейский Детектив</option>
+                                        <option value="det_action">Боевики</option>
+                                        <option value="det_irony">Иронический Детектив</option>
+                                        <option value="det_history">Исторический Детектив</option>
+                                        <option value="det_espionage">Шпионский Детектив</option>
+                                        <option value="det_crime">Криминальный Детектив</option>
+                                        <option value="det_political">Политический Детектив</option>
+                                        <option value="det_maniac">Маньяки</option>
+                                        <option value="det_hard">Крутой Детектив</option>
+                                        <option value="thriller">Триллеры</option>
+                                        <option value="detective">Детектив</option>
+                                        <option value="sf_detective">Детективная Фантастика</option>
+                                        <option value="child_det">Детские Остросюжетные</option>
+                                        <option value="love_detective">Остросюжетные Любовные Романы</option>
+                                        <option value="prose">Проза</option>
+                                        <option value="prose_classic">Классическая Проза</option>
+                                        <option value="prose_history">Историческая Проза</option>
+                                        <option value="prose_contemporary">Современная Проза</option>
+                                        <option value="prose_counter">Контркультура</option>
+                                        <option value="prose_rus_classic">Русская Классика</option>
+                                        <option value="prose_su_classics">Советская Классика</option>
+                                        <option value="humor_prose">Юмористическая Проза</option>
+                                        <option value="child_prose">Детская Проза</option>
+                                        <option value="love">Любовные романы</option>
+                                        <option value="love_contemporary">Современные Любовные Романы</option>
+                                        <option value="love_history">Исторические Любовные Романы</option>
+                                        <option value="love_detective">Остросюжетные Любовные Романы</option>
+                                        <option value="love_short">Короткие Любовные Романы</option>
+                                        <option value="love_erotica">Эротика</option>
+                                        <option value="adv_western">Вестерны</option>
+                                        <option value="adv_history">Исторические Приключения</option>
+                                        <option value="adv_indian">Приключения: Индейцы</option>
+                                        <option value="adv_maritime">Морские Приключения</option>
+                                        <option value="adv_geo">Путешествия и География</option>
+                                        <option value="adv_animal">Природа и Животные</option>
+                                        <option value="adventure">Приключения: Прочее</option>
+                                        <option value="child_adv">Детские Приключения</option>
+                                        <option value="children">Детское</option>
+                                        <option value="child_tale">Сказки</option>
+                                        <option value="child_verse">Детские Стихи</option>
+                                        <option value="child_prose">Детская Проза</option>
+                                        <option value="child_sf">Детская Фантастика</option>
+                                        <option value="child_det">Детские Остросюжетные</option>
+                                        <option value="child_adv">Детские Приключения</option>
+                                        <option value="child_education">Детская Образовательная литература</option>
+                                        <option value="children">Детское: Прочее</option>
+                                        <option value="poetry">Поэзия</option>
+                                        <option value="dramaturgy">Драматургия</option>
+                                        <option value="humor_verse">Юмористические Стихи</option>
+                                        <option value="child_verse">Детские Стихи</option>
+                                        <option value="antique_ant">Античная Литература</option>
+                                        <option value="antique_european">Европейская Старинная Литература</option>
+                                        <option value="antique_russian">Древнерусская Литература</option>
+                                        <option value="antique_east">Древневосточная Литература</option>
+                                        <option value="antique_myths">Мифы. Легенды. Эпос</option>
+                                        <option value="antique">Старинная Литература: Прочее</option>
+                                        <option value="sci_history">История</option>
+                                        <option value="sci_psychology">Психология</option>
+                                        <option value="sci_culture">Культурология</option>
+                                        <option value="sci_religion">Религиоведение</option>
+                                        <option value="sci_philosophy">Философия</option>
+                                        <option value="sci_politics">Политика</option>
+                                        <option value="sci_business">Деловая литература</option>
+                                        <option value="sci_juris">Юриспруденция</option>
+                                        <option value="sci_linguistic">Языкознание</option>
+                                        <option value="sci_medicine">Медицина</option>
+                                        <option value="sci_phys">Физика</option>
+                                        <option value="sci_math">Математика</option>
+                                        <option value="sci_chem">Химия</option>
+                                        <option value="sci_biology">Биология</option>
+                                        <option value="sci_tech">Технические</option>
+                                        <option value="science">Научно-образовательная: Прочее</option>
+                                        <option value="adv_animal">Природа и Животные</option>
+                                        <option value="comp_www">Интернет</option>
+                                        <option value="comp_programming">Программирование</option>
+                                        <option value="comp_hard">Компьютерное Железо</option>
+                                        <option value="comp_soft">Программы</option>
+                                        <option value="comp_db">Базы Данных</option>
+                                        <option value="comp_osnet">ОС и Сети</option>
+                                        <option value="computers">Компьютеры: Прочее</option>
+                                        <option value="ref_encyc">Энциклопедии</option>
+                                        <option value="ref_dict">Словари</option>
+                                        <option value="ref_ref">Справочники</option>
+                                        <option value="ref_guide">Руководства</option>
+                                        <option value="reference">Справочная Литература: Прочее</option>
+                                        <option value="nonf_biography">Биографии и Мемуары</option>
+                                        <option value="nonf_publicism">Публицистика</option>
+                                        <option value="nonf_criticism">Критика</option>
+                                        <option value="nonfiction">Документальное: Прочее</option>
+                                        <option value="design">Искусство, Дизайн</option>
+                                        <option value="adv_animal">Природа и Животные</option>
+                                        <option value="religion">Религия</option>
+                                        <option value="religion_rel">Религия</option>
+                                        <option value="religion_esoterics">Эзотерика</option>
+                                        <option value="religion_self">Самосовершенствование</option>
+                                        <option value="religion">Религия и духовность: Прочее</option>
+                                        <option value="sci_religion">Религиоведение</option>
+                                        <option value="humor_anecdote">Анекдоты</option>
+                                        <option value="humor_prose">Юмористическая Проза</option>
+                                        <option value="humor_verse">Юмористические Стихи</option>
+                                        <option value="humor">Юмор: Прочее</option>
+                                        <option value="home_cooking">Кулинария</option>
+                                        <option value="home_pets">Домашние Животные</option>
+                                        <option value="home_crafts">Хобби, Ремесла</option>
+                                        <option value="home_entertain">Развлечения</option>
+                                        <option value="home_health">Здоровье</option>
+                                        <option value="home_garden">Сад и Огород</option>
+                                        <option value="home_diy">Сделай Сам</option>
+                                        <option value="home_sport">Спорт</option>
+                                        <option value="home_sex">Эротика, Секс</option>
+                                        <option value="home">Дом и Семья: Прочее</option>
+                                    </select>
+                                    <img src={arrow} alt="" />
+                                    <button onClick={() => removeGenre(index)}>&#215;</button>
+                                </div>
+                            ))}
+                            <button type="button" onClick={addGenre}>+ Добавить жанр</button>
+                        </div>
+
+                    </div>
+                    <div>
+
                         <div>
                             <div>
                                 <p>Keywords</p>
@@ -800,16 +942,6 @@ export default function App() {
 
                     </div>
                     <button type="button" onClick={handleClick}>СОЗДАТЬ FB2</button>
-                    {/* <form>
-                        <label for="city">Жанр</label>
-                        <select id="city" name="city">
-                            <option value="moscow">Москва</option>
-                            <option value="spb">Санкт-Петербург</option>
-                            <option value="kazan">Казань</option>
-                            <option value="novosibirsk">Новосибирск</option>
-                        </select>
-                        <button type="submit">Отправить</button>
-                    </form> */}
                 </div>
             </div>
         </main>
