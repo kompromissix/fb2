@@ -1,5 +1,38 @@
 header{
-    height: 60px;
+    height: 50px;
     width: 100%;
-    background-color: #637384;
+    background-color: #343434;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    >nav{
+        width: 1200px;
+        height: 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        >div{
+            display: flex;
+            align-items: center;
+            >a{
+                >img{
+                    height: 40px;
+                }
+            }
+
+            >a:nth-child(2){
+                padding-left: 10px;
+            }
+            >a:nth-child(3){
+                padding-left: 10px;
+            }
+        }
+
+        a{
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    }
+
 }
