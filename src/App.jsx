@@ -811,11 +811,6 @@ export default function App() {
                                 </SwiperSlide>
                                 ))}
                             </Swiper>
-
-                            <input type="file" ref={fileInputRef}onChange={handleFileChangeObloshka}accept="image/*"/>
-                            <div>
-                                <textarea  value={imageData} readOnly />
-                            </div>
                         </div>
 
                         <div>
@@ -896,6 +891,13 @@ export default function App() {
                                     <div>
                                         <div/>
                                         <input type="text" id="sequence" placeholder="Серия"/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p>Обложка</p>
+                                    <div>
+                                        <label for={`oblo`}>Нажмите, чтобы добавить</label>
+                                        <input type="file" id="oblo" ref={fileInputRef}onChange={handleFileChangeObloshka}accept="image/*"/>
                                     </div>
                                 </div>
                             </div>
@@ -1061,12 +1063,10 @@ export default function App() {
 
                             </div>
                         </div>
-
                         <button type="button" onClick={handleClick}>СОЗДАТЬ FB2</button>
                     </div>
                 </div>
             </section>
-
         </main>
     );
 }
