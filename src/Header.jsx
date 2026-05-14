@@ -31,6 +31,7 @@ export default function Header(){
         localStorage.removeItem('user')
         setUser(null)
         window.dispatchEvent(new Event('authChange'))
+        window.location.reload();
     };
     return(
         <>
@@ -38,8 +39,6 @@ export default function Header(){
                 <nav>
                     <div>
                         <Link to="/App"><img src={logo} alt="" /></Link>
-                        <Link to="/guide">Руководство</Link>
-                        <Link to="/faq">FAQ</Link>
                     </div>
                     {user ? (
                         <div>

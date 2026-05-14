@@ -69,7 +69,7 @@ export default function Login(){
                                 <Swiper modules={[Navigation, Pagination, Scrollbar, A11y, Mousewheel]} initialSlide={0} pagination={{el: paginationRef.current, clickable: true, renderBullet: (index, className) => {return `<button class="${className}">${names[index]}</button>`}}} onBeforeInit={(swiper) => {swiper.params.pagination.el = paginationRef.current;}} spaceBetween={50} slidesPerView={1} navigation = {false}  direction='horizontal' allowTouchMove = {false}>
                                     <SwiperSlide>
                                         <input type="text" placeholder='Логин' value={login} onChange={e => setLogin(e.target.value)}/>
-                                        <input type="password" placeholder='Регистрация' value={password} onChange={e => setPassword(e.target.value)}/>
+                                        <input type="password" placeholder='Пароль' value={password} onChange={e => setPassword(e.target.value)}/>
                                         <button onClick={() => handleLogin(login, password)}>Вход</button>
                                     </SwiperSlide>
                                     <SwiperSlide>
