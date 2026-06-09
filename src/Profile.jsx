@@ -10,7 +10,7 @@ export default function Profile(){
         const fetchProjects = async () => {
             const token = localStorage.getItem('token');
             
-            const res = await fetch('http://localhost:5000/api/projects', {
+            const res = await fetch('/api/projects', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -32,7 +32,7 @@ export default function Profile(){
     if (!user) return <p>Не авторизован</p>
     const loadProject = async (id) => {
         const token = localStorage.getItem('token');
-        const res = await fetch(`http://localhost:5000/api/projects/${id}`, {
+        const res = await fetch(`/api/projects/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -55,7 +55,7 @@ export default function Profile(){
         const confirmDelete = confirm('Удалить проект?')
         if (!confirmDelete) return
 
-        await fetch(`http://localhost:5000/api/projects/${id}`, {
+        await fetch(`/api/projects/${id}`, {
             method: 'DELETE',
             headers: {
                 Authorization: `Bearer ${token}`

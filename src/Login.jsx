@@ -16,7 +16,7 @@ export default function Login(){
     const [password, setPassword] = useState('');
     const nav = useNavigate()
     const handleLogin = async (login, password) => {
-        const res = await fetch('http://localhost:5000/api/login', {
+        const res = await fetch('/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -37,7 +37,7 @@ export default function Login(){
     };
     
     const handleRegister = async (login, password) => {
-        const res = await fetch('http://localhost:5000/api/register', {
+        const res = await fetch('/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
