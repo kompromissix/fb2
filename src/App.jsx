@@ -714,8 +714,8 @@ export default function App() {
         const token = localStorage.getItem('token');
         
         const url = projectId
-            ? `http://localhost:5000/api/projects/${projectId}`
-            : `http://localhost:5000/api/projects`;
+            ? `/api/projects/${projectId}`
+            : `/api/projects`;
         
         const method = projectId ? 'PUT' : 'POST';
         
