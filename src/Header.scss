@@ -46,3 +46,12 @@ header{
     }
 
 }
+
+@media screen and (max-width: 1199px) {
+    header{
+        height: 60px;
+        >nav{
+            width: 95%;
+        }
+    }
+}
